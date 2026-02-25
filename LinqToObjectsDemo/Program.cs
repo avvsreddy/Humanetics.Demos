@@ -6,6 +6,8 @@ namespace LinqToObjectsDemo
     {
         static void Main(string[] args)
         {
+
+            var book1 = new { Author = "Author1", Title = "Title1" };
             //List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             ////var evenNumbers = numbers.Where(n => n % 2 == 0);
             //var evenNumbers = (from n in numbers
@@ -43,14 +45,21 @@ namespace LinqToObjectsDemo
             // Get all book titles belonging to the "Computer" genre
             var computerBooks = (from book in doc.Descendants("book")
                                  where book.Element("genre")?.Value == "Computer"
-                                 select book.Element("title")?.Value).ToList();
+                                 select new { Author = book.Element("author").Value, Title = book.Element("title")?.Value })
+                                 .ToList();
 
             // display the computer book titles
-            foreach (var title in computerBooks)
+            foreach (var book in computerBooks)
             {
-                Console.WriteLine(title);
-
+                Console.WriteLine($"Title: {book.Title}, Author: {book.Author}");
             }
         }
     }
+
+    //class BookTitleAuthor
+    //{
+    //    public string Author { get; set; }
+    //    public string Title { get; set; }
+
+    //}
 }
