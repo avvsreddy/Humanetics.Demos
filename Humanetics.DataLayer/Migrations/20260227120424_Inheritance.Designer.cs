@@ -3,6 +3,7 @@ using Humanetics.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Humanetics.DataLayer.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    partial class ProductDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260227120424_Inheritance")]
+    partial class Inheritance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,8 +23,6 @@ namespace Humanetics.DataLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.HasSequence("PersonSequence");
 
             modelBuilder.Entity("Humanetics.DataLayer.Entities.Category", b =>
                 {
@@ -43,10 +44,14 @@ namespace Humanetics.DataLayer.Migrations
                 {
                     b.Property<int>("PersonId")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("NEXT VALUE FOR [PersonSequence]");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseSequence(b.Property<int>("PersonId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonId"));
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(8)
+                        .HasColumnType("nvarchar(8)");
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -59,9 +64,11 @@ namespace Humanetics.DataLayer.Migrations
 
                     b.HasKey("PersonId");
 
-                    b.ToTable((string)null);
+                    b.ToTable("People");
 
-                    b.UseTpcMappingStrategy();
+                    b.HasDiscriminator().HasValue("Person");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Humanetics.DataLayer.Entities.Product", b =>
@@ -122,7 +129,7 @@ namespace Humanetics.DataLayer.Migrations
                     b.Property<int>("Discount")
                         .HasColumnType("int");
 
-                    b.ToTable("Customers");
+                    b.HasDiscriminator().HasValue("Customer");
                 });
 
             modelBuilder.Entity("Humanetics.DataLayer.Entities.Supplier", b =>
@@ -135,7 +142,7 @@ namespace Humanetics.DataLayer.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.ToTable("Suppliers");
+                    b.HasDiscriminator().HasValue("Supplier");
                 });
 
             modelBuilder.Entity("Humanetics.DataLayer.Entities.Product", b =>

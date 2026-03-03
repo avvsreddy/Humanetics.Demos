@@ -3,6 +3,7 @@ using Humanetics.DataLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Humanetics.DataLayer.Migrations
 {
     [DbContext(typeof(ProductDbContext))]
-    partial class ProductDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260227115441_many-many")]
+    partial class manymany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,8 +23,6 @@ namespace Humanetics.DataLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.HasSequence("PersonSequence");
 
             modelBuilder.Entity("Humanetics.DataLayer.Entities.Category", b =>
                 {
@@ -37,31 +38,6 @@ namespace Humanetics.DataLayer.Migrations
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Humanetics.DataLayer.Entities.Person", b =>
-                {
-                    b.Property<int>("PersonId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValueSql("NEXT VALUE FOR [PersonSequence]");
-
-                    SqlServerPropertyBuilderExtensions.UseSequence(b.Property<int>("PersonId"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Phone")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PersonId");
-
-                    b.ToTable((string)null);
-
-                    b.UseTpcMappingStrategy();
                 });
 
             modelBuilder.Entity("Humanetics.DataLayer.Entities.Product", b =>
@@ -100,42 +76,47 @@ namespace Humanetics.DataLayer.Migrations
                     b.ToTable("tbl_products");
                 });
 
-            modelBuilder.Entity("ProductSupplier", b =>
-                {
-                    b.Property<int>("ProductsProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SuppliersPersonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsProductId", "SuppliersPersonId");
-
-                    b.HasIndex("SuppliersPersonId");
-
-                    b.ToTable("ProductSupplier");
-                });
-
-            modelBuilder.Entity("Humanetics.DataLayer.Entities.Customer", b =>
-                {
-                    b.HasBaseType("Humanetics.DataLayer.Entities.Person");
-
-                    b.Property<int>("Discount")
-                        .HasColumnType("int");
-
-                    b.ToTable("Customers");
-                });
-
             modelBuilder.Entity("Humanetics.DataLayer.Entities.Supplier", b =>
                 {
-                    b.HasBaseType("Humanetics.DataLayer.Entities.Person");
+                    b.Property<int>("SupplierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SupplierId"));
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GST")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Phone")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
+                    b.HasKey("SupplierId");
+
                     b.ToTable("Suppliers");
+                });
+
+            modelBuilder.Entity("ProductSupplier", b =>
+                {
+                    b.Property<int>("ProductsProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SuppliersSupplierId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductsProductId", "SuppliersSupplierId");
+
+                    b.HasIndex("SuppliersSupplierId");
+
+                    b.ToTable("ProductSupplier");
                 });
 
             modelBuilder.Entity("Humanetics.DataLayer.Entities.Product", b =>
@@ -157,7 +138,7 @@ namespace Humanetics.DataLayer.Migrations
 
                     b.HasOne("Humanetics.DataLayer.Entities.Supplier", null)
                         .WithMany()
-                        .HasForeignKey("SuppliersPersonId")
+                        .HasForeignKey("SuppliersSupplierId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

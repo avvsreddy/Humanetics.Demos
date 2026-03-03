@@ -1,0 +1,57 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Humanetics.DataLayer.Entities.Product">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>EAAAAAAAAQAAAIAAAAAAAAQCAAIAAAAAAAAAAIABCAA=</HashCode>
+      <FileName>Entities\Product.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="Category" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Property Name="Suppliers" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Humanetics.DataLayer.Entities.Category">
+    <Position X="3.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAQAAAAAAAAAAAAAAAAAAAQ=</HashCode>
+      <FileName>Entities\Product.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Products" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Humanetics.DataLayer.Entities.Supplier">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <AssociationLine Name="Products" Type="Humanetics.DataLayer.Entities.Product" FixedFromPoint="true">
+      <Path>
+        <Point X="1.125" Y="4.75" />
+        <Point X="1.125" Y="2.689" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAQQ=</HashCode>
+      <FileName>Entities\Product.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Products" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Humanetics.DataLayer.Entities.Person">
+    <Position X="2.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAEAAAAAAQAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>Entities\Product.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Humanetics.DataLayer.Entities.Customer">
+    <Position X="4" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAA=</HashCode>
+      <FileName>Entities\Product.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Arial" Size="10" />
+</ClassDiagram>
